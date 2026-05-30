@@ -1196,17 +1196,21 @@
         if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
 
+        this._cdInterval = null;
+        this._cdTimeout = null;
+
         if (this.countdownSec > 0) {
           $('timerDisplay').textContent = this.countdownSec;
           $('timerLabel').textContent = 'Ready';
           this.playCountdown();
           let cd = this.countdownSec - 1;
-          const cdInt = setInterval(() => {
+          this._cdInterval = setInterval(() => {
             if (cd > 0) { $('timerDisplay').textContent = cd; this.playCountdown(); cd--; }
-            else { clearInterval(cdInt); }
+            else { clearInterval(this._cdInterval); this._cdInterval = null; }
           }, 1000);
 
-          setTimeout(() => {
+          this._cdTimeout = setTimeout(() => {
+            if (!this.running) return;
             this.playStart();
             $('timerLabel').textContent = this.preset === 'forTime' ? 'For Time' : this.preset?.toUpperCase() || '';
             this.interval = setInterval(() => this.tick(), 1000);
@@ -1275,6 +1279,8 @@
       stop() {
         this.running = false;
         if (this.interval) { clearInterval(this.interval); this.interval = null; }
+        if (this._cdInterval) { clearInterval(this._cdInterval); this._cdInterval = null; }
+        if (this._cdTimeout) { clearTimeout(this._cdTimeout); this._cdTimeout = null; }
       },
 
       reset() {
