@@ -1037,6 +1037,21 @@
         this.highlightWheel(wrap);
       },
 
+      getWheelCenter(id) {
+        const wrap = document.getElementById(id + 'Wrap');
+        if (!wrap) return 0;
+        const wheel = wrap.querySelector('.wheel');
+        const items = wrap.querySelectorAll('.wheel-item');
+        const center = wheel.scrollTop + wheel.clientHeight / 2;
+        let closest = null, closestDist = Infinity;
+        items.forEach(it => {
+          const mid = it.offsetTop + it.offsetHeight / 2;
+          const dist = Math.abs(mid - center);
+          if (dist < closestDist) { closestDist = dist; closest = it; }
+        });
+        return closest ? parseInt(closest.dataset.val) : 0;
+      },
+
       highlightWheel(wrap) {
         const wheel = wrap.querySelector('.wheel');
         const items = wrap.querySelectorAll('.wheel-item');
@@ -1052,7 +1067,9 @@
       },
 
       onWheelScroll(wrap) {
+        if (this.running) this.pause();
         this.highlightWheel(wrap);
+        this.updateFromSettings();
         clearTimeout(wrap._snapTimeout);
         wrap._snapTimeout = setTimeout(() => {
           const wheel = wrap.querySelector('.wheel');
@@ -1064,15 +1081,12 @@
             const dist = Math.abs(mid - center);
             if (dist < closestDist) { closestDist = dist; closest = it; }
           });
-          if (closest) { closest.scrollIntoView({ block: 'center', behavior: 'smooth' }); this.updateFromSettings(); }
-        }, 150);
+          if (closest) closest.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }, 200);
       },
 
       getWheelValue(id) {
-        const wrap = document.getElementById(id + 'Wrap');
-        if (!wrap) return 0;
-        const active = wrap.querySelector('.wheel-item.active');
-        return active ? parseInt(active.dataset.val) : 0;
+        return this.getWheelCenter(id);
       },
 
       setPreset(name) {
