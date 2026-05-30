@@ -2,7 +2,7 @@
   "name": "CrossFit Palm",
   "short_name": "CF Palm",
   "description": "CrossFit Palm Course",
-  "start_url": "/",
+  "start_url": "/cf-palm/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#0a0303",
