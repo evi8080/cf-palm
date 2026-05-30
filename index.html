@@ -388,143 +388,219 @@
     }
     .gear-btn:hover { color: #666; }
 
-    /* Modal */
-    .modal-overlay {
+    /* Menu overlay */
+    .menu-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
       z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
     }
-    .modal-overlay.active { display: flex; }
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px 24px;
-      max-width: 400px;
-      width: 100%;
-      animation: fadeUp 0.3s ease-out;
+    .menu-overlay.active { display: block; }
+    .menu-panel {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      border: 1px solid #1a1a1a;
+      border-radius: 14px;
+      padding: 8px;
+      z-index: 101;
+      display: none;
+      min-width: 180px;
+      animation: fadeUp 0.2s ease-out;
     }
-    .modal-header {
+    .menu-panel.active { display: block; }
+    .menu-item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-    }
-    .modal-header h3 {
-      font-size: 16px;
-      font-weight: 700;
-    }
-    .modal-close {
+      gap: 12px;
+      width: 100%;
+      padding: 14px 18px;
       background: none;
       border: none;
-      color: var(--muted);
-      font-size: 18px;
+      color: #ccc;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 10px;
+      text-align: left;
+      margin: 0;
+      transition: background 0.15s;
+    }
+    .menu-item:hover { background: #1a1a1a; color: #fff; }
+    .menu-item .mi-icon { font-size: 18px; width: 24px; text-align: center; }
+    .menu-divider { height: 1px; background: #1a1a1a; margin: 4px 8px; }
+
+    /* Timer page (full) */
+    .timer-page {
+      display: none;
+      max-width: 460px;
+      width: 100%;
+    }
+    .timer-page.active { display: block; }
+    .timer-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      margin-top: 12px;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      color: #333;
+      font-size: 20px;
       cursor: pointer;
       padding: 4px 8px;
       width: auto;
       margin: 0;
+      transition: color 0.2s;
     }
-    .modal-close:hover { color: #999; }
+    .back-btn:hover { color: #666; }
+    .timer-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
 
     /* Timer display */
     .timer-display {
       text-align: center;
-      font-size: 72px;
+      font-size: 80px;
       font-weight: 800;
       letter-spacing: -0.03em;
       font-variant-numeric: tabular-nums;
       font-feature-settings: "tnum";
-      margin: 16px 0 8px;
+      margin: 8px 0 4px;
       color: #fff;
       line-height: 1;
     }
     .timer-display.warning { color: var(--accent); }
     .timer-label {
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       color: var(--muted);
-      margin-bottom: 24px;
+      margin-bottom: 6px;
     }
     .timer-round {
       text-align: center;
-      font-size: 13px;
+      font-size: 14px;
       color: #999;
-      margin-bottom: 20px;
-      min-height: 20px;
+      margin-bottom: 24px;
+      min-height: 22px;
+      font-weight: 500;
     }
 
     /* Preset buttons */
-    .preset-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
+    .preset-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
       margin-bottom: 20px;
+      -webkit-overflow-scrolling: touch;
     }
+    .preset-scroll::-webkit-scrollbar { display: none; }
     .preset-btn {
+      flex-shrink: 0;
       background: #141414;
-      border: 1px solid var(--border);
+      border: 1px solid #1a1a1a;
       color: #999;
-      border-radius: var(--radius-sm);
-      padding: 12px 8px;
-      font-size: 11px;
+      border-radius: 20px;
+      padding: 10px 18px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
       font-family: inherit;
-      text-align: center;
-      width: 100%;
+      white-space: nowrap;
+      width: auto;
       margin: 0;
     }
     .preset-btn:hover { color: #fff; border-color: #333; }
     .preset-btn.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
 
+    /* Settings row */
+    .settings-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .setting {
+      flex: 1;
+      text-align: center;
+    }
+    .setting label {
+      display: block;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .setting input {
+      width: 100%;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 10px 4px;
+      margin: 0;
+    }
+    .setting .unit {
+      font-size: 10px;
+      color: #555;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .cd-select {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .cd-opt {
+      background: #141414;
+      border: 1px solid #1a1a1a;
+      color: #999;
+      border-radius: 16px;
+      padding: 7px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      width: auto;
+      margin: 0;
+    }
+    .cd-opt:hover { color: #fff; border-color: #333; }
+    .cd-opt.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+
     /* Timer controls */
     .timer-controls {
       display: flex;
       gap: 10px;
-      margin-top: 8px;
     }
     .timer-controls button {
       flex: 1;
       margin: 0;
-      padding: 14px;
-      font-size: 14px;
+      padding: 16px;
+      font-size: 15px;
     }
     .btn-start { background: var(--accent); }
     .btn-pause { background: #1a1a1a; border: 1px solid var(--border); color: #fff; }
     .btn-pause:hover { background: #222; }
-    .btn-reset { background: transparent; border: 1px solid #222; color: #666; }
+    .btn-reset { background: transparent; border: 1px solid #222; color: #666; font-size: 13px; }
     .btn-reset:hover { background: #111; color: #999; }
 
-    /* Custom input */
-    .custom-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      align-items: center;
-    }
-    .custom-row input {
-      flex: 1;
-      margin: 0;
-      text-align: center;
-      font-size: 24px;
-      font-weight: 700;
-      padding: 10px;
-    }
-    .custom-row span {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
-    }
     .entry-list {
       margin-top: 32px;
       display: flex;
@@ -624,38 +700,44 @@
     </div>
   </div>
 
-  <!-- ═══════════════════ TIMER MODAL ═══════════════════ -->
-  <div class="modal-overlay" id="timerModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Timer</h3>
-        <button class="modal-close" id="modalClose">✕</button>
-      </div>
+  <!-- ═══════════════════ MENU OVERLAY ═══════════════════ -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <div class="menu-panel" id="menuPanel">
+    <button class="menu-item" data-page="home">
+      <span class="mi-icon">🏠</span> Home
+    </button>
+    <button class="menu-item" data-page="timer">
+      <span class="mi-icon">⏱</span> Timer
+    </button>
+  </div>
 
-      <div class="preset-grid" id="presetGrid">
-        <button class="preset-btn" data-preset="tabata">TABATA</button>
-        <button class="preset-btn" data-preset="emom">EMOM</button>
-        <button class="preset-btn" data-preset="amrap5">AMRAP 5</button>
-        <button class="preset-btn" data-preset="amrap10">AMRAP 10</button>
-        <button class="preset-btn" data-preset="amrap15">AMRAP 15</button>
-        <button class="preset-btn" data-preset="custom">Custom</button>
-      </div>
+  <!-- ═══════════════════ TIMER PAGE ═══════════════════ -->
+  <div class="timer-page" id="timerPage">
+    <div class="timer-header">
+      <button class="back-btn" id="backFromTimer">⚙</button>
+      <h2>Timer</h2>
+    </div>
 
-      <div class="timer-display" id="timerDisplay">00:00</div>
-      <div class="timer-label" id="timerLabel">Select preset</div>
-      <div class="timer-round" id="timerRound"></div>
+    <div class="preset-scroll" id="presetScroll">
+      <button class="preset-btn" data-preset="tabata">Tabata</button>
+      <button class="preset-btn" data-preset="emom">EMOM</button>
+      <button class="preset-btn" data-preset="amrap">AMRAP</button>
+      <button class="preset-btn" data-preset="forTime">For Time</button>
+      <button class="preset-btn" data-preset="custom">Custom</button>
+    </div>
 
-      <div class="custom-row" id="customRow" style="display:none">
-        <input type="number" id="customMin" value="1" min="0" max="99" placeholder="Min">
-        <span>:</span>
-        <input type="number" id="customSec" value="0" min="0" max="59" placeholder="Sec">
-      </div>
+    <div class="settings-row" id="timerSettings"></div>
 
-      <div class="timer-controls">
-        <button class="btn-start" id="timerStart">Start</button>
-        <button class="btn-pause" id="timerPause" style="display:none">Pause</button>
-        <button class="btn-reset" id="timerReset">Reset</button>
-      </div>
+    <div class="cd-select" id="cdSelect"></div>
+
+    <div class="timer-display" id="timerDisplay">00:00</div>
+    <div class="timer-label" id="timerLabel">Select preset</div>
+    <div class="timer-round" id="timerRound"></div>
+
+    <div class="timer-controls">
+      <button class="btn-start" id="timerStart">Start</button>
+      <button class="btn-pause" id="timerPause" style="display:none">Pause</button>
+      <button class="btn-reset" id="timerReset">Reset</button>
     </div>
   </div>
 
@@ -851,40 +933,21 @@
       }, 60000);
     }
 
-    // ── Timer ──
+    // ── Timer Page ──
     const Timer = {
-      interval: null,
-      remaining: 0,
-      total: 0,
-      running: false,
-      preset: null,
-      round: 0,
-      totalRounds: 0,
-      workTime: 0,
-      restTime: 0,
-      isWork: true,
-      audioCtx: null,
-
-      presets: {
-        tabata:  { work: 20, rest: 10, rounds: 8,  label: 'Tabata' },
-        emom:    { work: 60, rest: 0,  rounds: 10, label: 'EMOM' },
-        amrap5:  { work: 300, rest: 0, rounds: 1,  label: 'AMRAP 5 min' },
-        amrap10: { work: 600, rest: 0, rounds: 1,  label: 'AMRAP 10 min' },
-        amrap15: { work: 900, rest: 0, rounds: 1,  label: 'AMRAP 15 min' }
-      },
+      interval: null, remaining: 0, running: false, preset: null,
+      round: 0, totalRounds: 0, workTime: 0, restTime: 0, isWork: true,
+      audioCtx: null, countdownSec: 3,
 
       beep(freq, dur, type = 'square') {
         if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const o = this.audioCtx.createOscillator();
         const g = this.audioCtx.createGain();
-        o.type = type;
-        o.frequency.value = freq;
-        g.gain.value = 0.15;
+        o.type = type; o.frequency.value = freq;
+        g.gain.value = 0.12;
         g.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + dur);
-        o.connect(g);
-        g.connect(this.audioCtx.destination);
-        o.start();
-        o.stop(this.audioCtx.currentTime + dur + 0.05);
+        o.connect(g); g.connect(this.audioCtx.destination);
+        o.start(); o.stop(this.audioCtx.currentTime + dur + 0.05);
       },
 
       playStart() { this.beep(880, 0.15); setTimeout(() => this.beep(1100, 0.3), 200); },
@@ -893,58 +956,92 @@
       playRound() { this.beep(800, 0.1); setTimeout(() => this.beep(1000, 0.15), 150); },
 
       setPreset(name) {
-        this.reset();
+        this.stop();
+        this.preset = name;
         document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
         const btn = document.querySelector(`[data-preset="${name}"]`);
         if (btn) btn.classList.add('selected');
 
-        if (name === 'custom') {
-          this.preset = 'custom';
-          $('customRow').style.display = 'flex';
-          $('timerLabel').textContent = 'Custom Timer';
-          this.updateCustomDisplay();
-        } else {
-          this.preset = name;
-          $('customRow').style.display = 'none';
-          const p = this.presets[name];
-          this.workTime = p.work;
-          this.restTime = p.rest;
-          this.totalRounds = p.rounds;
-          $('timerLabel').textContent = p.label;
-          this.round = 0;
-          this.isWork = true;
-          this.remaining = this.workTime;
-          this.display();
-          $('timerRound').textContent = p.rounds > 1 ? '' : '';
+        let html = '';
+        const n = (lbl, id, val, min, max, unit) =>
+          `<div class="setting"><label>${lbl}</label><input type="number" id="${id}" value="${val}" min="${min}" max="${max}"><div class="unit">${unit}</div></div>`;
+
+        if (name === 'tabata') {
+          html = n('Work', 'setWork', 20, 5, 120, 'sec') + n('Rest', 'setRest', 10, 0, 60, 'sec') + n('Rounds', 'setRounds', 8, 1, 99, 'rds');
+          this.applySettings();
+        } else if (name === 'emom') {
+          html = n('Interval', 'setWork', 60, 10, 300, 'sec') + n('Rounds', 'setRounds', 10, 1, 99, 'rds');
+          document.getElementById ? null : null;
+          this.applySettings();
+        } else if (name === 'amrap') {
+          html = n('Minutes', 'setMin', 10, 1, 60, 'min') + n('Seconds', 'setSec', 0, 0, 59, 'sec');
+        } else if (name === 'forTime') {
+          html = n('Minutes', 'setMin', 5, 1, 60, 'min') + n('Seconds', 'setSec', 0, 0, 59, 'sec');
+        } else if (name === 'custom') {
+          html = n('Minutes', 'setMin', 1, 0, 99, 'min') + n('Seconds', 'setSec', 0, 0, 59, 'sec');
         }
+
+        $('timerSettings').innerHTML = html;
+        this.renderCountdown();
+        this.updateFromSettings();
+        $('timerStart').style.display = '';
+        $('timerPause').style.display = 'none';
+        $('timerLabel').textContent = name === 'forTime' ? 'For Time' : name.toUpperCase();
+        $('timerRound').textContent = '';
       },
 
-      updateCustomDisplay() {
-        const m = parseInt($('customMin').value) || 0;
-        const s = parseInt($('customSec').value) || 0;
-        this.remaining = m * 60 + s;
-        this.total = this.remaining;
-        this.totalRounds = 1;
-        this.round = 0;
+      renderCountdown() {
+        const opts = [
+          { v: 0, l: 'No cd' }, { v: 3, l: '3 sec' }, { v: 5, l: '5 sec' },
+          { v: 10, l: '10 sec' }
+        ];
+        let html = '';
+        opts.forEach(o => {
+          const sel = this.countdownSec === o.v ? ' selected' : '';
+          html += `<button class="cd-opt${sel}" data-cd="${o.v}">${o.l}</button>`;
+        });
+        $('cdSelect').innerHTML = html;
+      },
+
+      applySettings() {
+        // Read settings after DOM update
+        setTimeout(() => this.updateFromSettings(), 50);
+      },
+
+      updateFromSettings() {
+        if (this.preset === 'tabata') {
+          this.workTime = parseInt($('setWork')?.value) || 20;
+          this.restTime = parseInt($('setRest')?.value) || 10;
+          this.totalRounds = parseInt($('setRounds')?.value) || 8;
+          this.remaining = this.workTime;
+          this.round = 0; this.isWork = true;
+        } else if (this.preset === 'emom') {
+          this.workTime = parseInt($('setWork')?.value) || 60;
+          this.restTime = 0;
+          this.totalRounds = parseInt($('setRounds')?.value) || 10;
+          this.remaining = this.workTime;
+          this.round = 0; this.isWork = true;
+        } else {
+          const m = parseInt($('setMin')?.value) || 0;
+          const s = parseInt($('setSec')?.value) || 0;
+          this.remaining = m * 60 + s;
+          this.totalRounds = 1;
+          this.round = 0;
+        }
         this.display();
-        $('timerRound').textContent = '';
       },
 
       display() {
         const m = Math.floor(this.remaining / 60);
         const s = this.remaining % 60;
         $('timerDisplay').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        if (this.remaining <= 5 && this.running) {
-          $('timerDisplay').classList.add('warning');
-        } else {
-          $('timerDisplay').classList.remove('warning');
-        }
+        $('timerDisplay').classList.toggle('warning', this.remaining <= 5 && this.running);
       },
 
       start() {
         if (this.running) return;
-        if (this.preset === 'custom') this.updateCustomDisplay();
-        if (this.remaining <= 0 && this.totalRounds <= 1) return;
+        if (this.preset === 'custom' || this.preset === 'amrap' || this.preset === 'forTime') this.updateFromSettings();
+        if (this.remaining <= 0) return;
 
         this.running = true;
         $('timerStart').style.display = 'none';
@@ -952,23 +1049,26 @@
         if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
 
-        // Countdown beeps
-        this.playCountdown();
-        let cd = 2;
-        const countdown = setInterval(() => {
-          if (cd > 0) this.playCountdown();
-          cd--;
-          if (cd < 0) clearInterval(countdown);
-        }, 1000);
+        if (this.countdownSec > 0) {
+          $('timerDisplay').textContent = this.countdownSec;
+          $('timerLabel').textContent = 'Ready';
+          this.playCountdown();
+          let cd = this.countdownSec - 1;
+          const cdInt = setInterval(() => {
+            if (cd > 0) { $('timerDisplay').textContent = cd; this.playCountdown(); cd--; }
+            else { clearInterval(cdInt); }
+          }, 1000);
 
-        // Start after 3s countdown
-        setTimeout(() => {
+          setTimeout(() => {
+            this.playStart();
+            $('timerLabel').textContent = this.preset === 'forTime' ? 'For Time' : this.preset?.toUpperCase() || '';
+            this.interval = setInterval(() => this.tick(), 1000);
+          }, this.countdownSec * 1000);
+        } else {
           this.playStart();
+          $('timerLabel').textContent = this.preset === 'forTime' ? 'For Time' : this.preset?.toUpperCase() || '';
           this.interval = setInterval(() => this.tick(), 1000);
-        }, 3000);
-
-        $('timerDisplay').textContent = '...';
-        $('timerLabel').textContent = 'Ready';
+        }
       },
 
       tick() {
@@ -976,8 +1076,7 @@
         this.display();
 
         if (this.remaining <= 0) {
-          if (this.preset === 'emom' || this.preset === 'tabata') {
-            // Transition
+          if ((this.preset === 'emom' || this.preset === 'tabata') && this.totalRounds > 1) {
             if (this.isWork && this.restTime > 0) {
               this.isWork = false;
               this.remaining = this.restTime;
@@ -988,10 +1087,7 @@
             }
             this.isWork = true;
             this.round++;
-            if (this.round >= this.totalRounds) {
-              this.finish();
-              return;
-            }
+            if (this.round >= this.totalRounds) { this.finish(); return; }
             this.remaining = this.workTime;
             this.playRound();
             $('timerLabel').textContent = this.preset === 'emom' ? 'EMOM' : 'Tabata';
@@ -1031,32 +1127,62 @@
         $('timerDisplay').classList.remove('warning');
         $('timerStart').style.display = '';
         $('timerPause').style.display = 'none';
-        $('timerLabel').textContent = this.presets[this.preset]?.label || 'Select preset';
-        $('timerRound').textContent = '';
-        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
-        $('customRow').style.display = 'none';
-        this.preset = null;
         $('timerDisplay').textContent = '00:00';
+        if (this.preset) this.setPreset(this.preset);
+        else { $('timerLabel').textContent = 'Select preset'; $('timerRound').textContent = ''; }
       }
     };
 
+    // ── Menu ──
     $('gearBtn').addEventListener('click', () => {
-      $('timerModal').classList.add('active');
-      if (Timer.audioCtx && Timer.audioCtx.state === 'suspended') Timer.audioCtx.resume();
+      $('menuOverlay').classList.toggle('active');
+      $('menuPanel').classList.toggle('active');
     });
-    $('modalClose').addEventListener('click', () => $('timerModal').classList.remove('active'));
-    $('timerModal').addEventListener('click', e => { if (e.target === $('timerModal')) $('timerModal').classList.remove('active'); });
+    $('menuOverlay').addEventListener('click', () => {
+      $('menuOverlay').classList.remove('active');
+      $('menuPanel').classList.remove('active');
+    });
 
-    $('presetGrid').addEventListener('click', e => {
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        $('menuOverlay').classList.remove('active');
+        $('menuPanel').classList.remove('active');
+        const page = item.dataset.page;
+        if (page === 'timer') {
+          $('public').style.display = 'none';
+          $('timerPage').classList.add('active');
+          if (!Timer.preset) Timer.setPreset('tabata');
+        } else {
+          $('timerPage').classList.remove('active');
+          $('public').style.display = '';
+          Timer.stop();
+        }
+      });
+    });
+
+    $('backFromTimer').addEventListener('click', () => {
+      $('timerPage').classList.remove('active');
+      $('public').style.display = '';
+      // Re-open menu
+    });
+
+    // ── Timer events ──
+    $('presetScroll').addEventListener('click', e => {
       if (e.target.classList.contains('preset-btn')) Timer.setPreset(e.target.dataset.preset);
     });
+
+    $('cdSelect').addEventListener('click', e => {
+      if (e.target.classList.contains('cd-opt')) {
+        Timer.countdownSec = parseInt(e.target.dataset.cd);
+        Timer.renderCountdown();
+      }
+    });
+
+    $('timerSettings').addEventListener('input', () => Timer.updateFromSettings());
 
     $('timerStart').addEventListener('click', () => Timer.start());
     $('timerPause').addEventListener('click', () => Timer.pause());
     $('timerReset').addEventListener('click', () => Timer.reset());
-
-    $('customMin').addEventListener('input', () => { if (Timer.preset === 'custom') Timer.updateCustomDisplay(); });
-    $('customSec').addEventListener('input', () => { if (Timer.preset === 'custom') Timer.updateCustomDisplay(); });
   </script>
 </body>
 </html>
