@@ -1064,7 +1064,7 @@
             const dist = Math.abs(mid - center);
             if (dist < closestDist) { closestDist = dist; closest = it; }
           });
-          if (closest) closest.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          if (closest) { closest.scrollIntoView({ block: 'center', behavior: 'smooth' }); this.updateFromSettings(); }
         }, 150);
       },
 
@@ -1170,7 +1170,7 @@
 
       start() {
         if (this.running) return;
-        if (this.preset === 'custom' || this.preset === 'amrap' || this.preset === 'forTime') this.updateFromSettings();
+        this.updateFromSettings();
         if (this.remaining <= 0) return;
 
         this.running = true;
