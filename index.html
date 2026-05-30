@@ -824,7 +824,31 @@
 
     // ── Service Worker (required for standalone PWA on Android) ──
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/cf-palm/sw.js');
+      navigator.serviceWorker.register('/cf-palm/sw.js').then(reg => {
+        // Auto-update: reload when new version detected
+        navigator.serviceWorker.addEventListener('message', e => {
+          if (e.data && e.data.type === 'UPDATE') {
+            window.location.reload();
+          }
+        });
+        // Check for updates on each page load
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                window.location.reload();
+              }
+            });
+          }
+        });
+      });
+      // Check for updates every time page loads
+      setInterval(() => {
+        navigator.serviceWorker.getRegistration().then(reg => {
+          if (reg) reg.update();
+        });
+      }, 60000);
     }
 
     // ── Timer ──
