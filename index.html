@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CrossFit Palm</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="CF Palm">
+  <meta name="theme-color" content="#0a0303">
+  <meta name="description" content="CrossFit Palm">
+  <link rel="apple-touch-icon" href="logo.jpg">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start: #080808;
+      --bg-end: #0f0606;
+      --surface: #0f0f0f;
+      --surface-hover: #141414;
+      --border: #1a1a1a;
+      --border-glow: rgba(240,64,44,0.06);
+      --text: #ffffff;
+      --text-dim: #cccccc;
+      --muted: #4a4a4a;
+      --accent: #f0402c;
+      --accent-soft: rgba(240,64,44,0.12);
+      --radius: 14px;
+      --radius-sm: 10px;
+    }
+
+    html { height: 100%; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(170deg, var(--bg-start) 0%, #0c0505 40%, var(--bg-end) 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 72px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 var(--border-glow); }
+      50%      { box-shadow: 0 0 0 1px var(--border-glow); }
+    }
+
+    .anim-up   { animation: fadeUp 0.5s ease-out both; }
+    .anim-in   { animation: fadeIn 0.4s ease-out both; }
+    .anim-d1   { animation-delay: 0.05s; }
+    .anim-d2   { animation-delay: 0.1s; }
+    .anim-d3   { animation-delay: 0.15s; }
+    .anim-d4   { animation-delay: 0.2s; }
+    .anim-d5   { animation-delay: 0.25s; }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PUBLIC PAGE
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    .page {
+      max-width: 460px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Logo */
+    .logo-area {
+      text-align: center;
+      margin-bottom: 44px;
+      margin-top: 12px;
+      position: relative;
+    }
+    .admin-top {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 10px;
+      font-weight: 600;
+      color: #222;
+      text-decoration: none;
+      padding: 4px 10px;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .admin-top:hover { color: #555; }
+    .logo-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      object-fit: cover;
+      margin-bottom: 16px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .logo-word {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .logo-word em {
+      font-style: normal;
+      color: #ddd;
+    }
+
+    /* Date block */
+    .date-block {
+      text-align: center;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 10px;
+    }
+    .date-num {
+      font-size: 15px;
+      font-weight: 500;
+      color: #999;
+    }
+    .date-day {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--accent-soft);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* Main card (latest entry) */
+    .card-main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 26px;
+      line-height: 1.8;
+      font-size: 15px;
+      font-weight: 400;
+      color: #fff;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .card-main .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 48px 0;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 36px 0 18px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #1a1a1a;
+    }
+
+    /* Previous entries */
+    .prev-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .prev-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, transform 0.2s;
+    }
+    .prev-card:active { transform: scale(0.985); }
+
+    .prev-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .prev-card-date {
+      font-size: 13px;
+      font-weight: 500;
+      color: #999;
+    }
+    .prev-card-day {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      background: var(--accent-soft);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .prev-card-preview {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      white-space: pre-wrap;
+      transition: color 0.25s;
+    }
+    .prev-card.expanded .prev-card-preview {
+      display: block;
+      -webkit-line-clamp: unset;
+      white-space: pre-wrap;
+      color: #fff;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+    }
+    .admin-entry {
+      font-size: 11px;
+      color: #1f1f1f;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .admin-entry:hover { color: #3a3a3a; }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       ADMIN PANEL
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    .admin-page {
+      display: none;
+      max-width: 460px;
+      width: 100%;
+    }
+    .admin-page.active { display: block; }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      margin-bottom: 36px;
+      transition: color 0.2s;
+    }
+    .back:hover { color: #999; }
+
+    .admin-page h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .admin-page .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(240,64,44,0.08);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 200px;
+      line-height: 1.7;
+    }
+
+    .field { margin-bottom: 22px; }
+
+    button {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 15px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+    button:hover { background: #d93826; }
+    button:active { transform: scale(0.98); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .btn-ghost:hover { color: #999; border-color: #2a2a2a; }
+
+    .btn-danger {
+      background: transparent;
+      border: 1px solid #2a1010;
+      color: #a55;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      width: auto;
+      margin-top: 0;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-danger:hover { background: #1a0707; color: #f87171; border-color: #4a1515; }
+
+    .msg {
+      margin-top: 14px;
+      font-size: 13px;
+      text-align: center;
+      min-height: 20px;
+    }
+    .msg.ok { color: #4ade80; }
+    .msg.err { color: #f87171; }
+
+    /* Entry list in admin */
+    .entry-list {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .entry-list-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .entry-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 13px;
+    }
+    .entry-item-date {
+      color: #999;
+      font-weight: 500;
+    }
+    .entry-item-preview {
+      color: #666;
+      max-width: 200px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-left: 10px;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════
+       PUBLIC PAGE
+       ════════════════════════════════════════ -->
+  <div class="page" id="public">
+    <div class="logo-area">
+      <a class="admin-top" href="#admin" id="gotoAdmin">Admin</a>
+      <img class="logo-img" src="logo.jpg" alt="CrossFit Palm">
+      <div class="logo-word">CrossFit <em>Palm</em></div>
+    </div>
+
+    <div class="date-block" id="dateBlock"></div>
+
+    <div class="card-main" id="mainCard">
+      <div class="empty">No entries yet.</div>
+    </div>
+
+    <div id="prevSection" style="display:none">
+      <div class="divider">Previous</div>
+      <div class="prev-entries" id="prevEntries"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       ADMIN PANEL
+       ════════════════════════════════════════ -->
+  <div class="admin-page" id="admin">
+    <a class="back" href="#" id="gotoPublic">← Back</a>
+    <h2>Admin</h2>
+    <p class="subtitle">Manage entries.</p>
+
+    <!-- Login -->
+    <div id="loginBlock">
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="pwInput" placeholder="Enter password" autocomplete="off">
+      </div>
+      <button id="loginBtn">Login</button>
+      <div class="msg" id="loginMsg"></div>
+    </div>
+
+    <!-- Editor -->
+    <div id="editorBlock" style="display:none">
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="dateInput">
+      </div>
+      <div class="field">
+        <label>Text</label>
+        <textarea id="textInput" placeholder="Write here..."></textarea>
+      </div>
+      <button id="saveBtn">Add Entry</button>
+      <div class="msg" id="saveMsg"></div>
+
+      <div class="entry-list" id="entryList"></div>
+    </div>
+  </div>
+
+  <script>
+    const PW = 'crossfit2025';
+    const LS_KEY = 'cfp_entries';
+
+    const $ = id => document.getElementById(id);
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+    // ── Routing ──
+    function showPublic() {
+      $('public').style.display = '';
+      $('admin').classList.remove('active');
+      window.location.hash = '';
+      renderPublic();
+    }
+    function showAdmin() {
+      $('public').style.display = 'none';
+      $('admin').classList.add('active');
+      window.location.hash = 'admin';
+      if (sessionStorage.getItem('cfp_auth')) {
+        $('loginBlock').style.display = 'none';
+        $('editorBlock').style.display = '';
+        renderAdmin();
+      } else {
+        $('loginBlock').style.display = '';
+        $('editorBlock').style.display = 'none';
+        $('pwInput').focus();
+      }
+    }
+
+    $('gotoAdmin').addEventListener('click', e => { e.preventDefault(); showAdmin(); });
+    $('gotoPublic').addEventListener('click', e => { e.preventDefault(); showPublic(); });
+    if (window.location.hash === '#admin') showAdmin(); else renderPublic();
+
+    // ── Data ──
+    function getEntries() {
+      try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveEntries(arr) {
+      localStorage.setItem(LS_KEY, JSON.stringify(arr));
+    }
+
+    // ── Public render ──
+    function renderPublic() {
+      const entries = getEntries();
+      entries.sort((a,b) => b.date.localeCompare(a.date));
+
+      if (entries.length === 0) {
+        $('dateBlock').innerHTML = '';
+        $('mainCard').innerHTML = '<div class="empty">No entries yet.</div>';
+        $('prevSection').style.display = 'none';
+        return;
+      }
+
+      const latest = entries[0];
+      const d = new Date(latest.date + 'T12:00:00'); // avoid timezone shift
+      const dayName = days[d.getDay()];
+      const dateStr = d.toLocaleDateString('en-US', { month:'long', day:'numeric' });
+
+      $('dateBlock').innerHTML = `<span class="date-num anim-up anim-d1">${dateStr}</span><span class="date-day anim-up anim-d2">${dayName}</span>`;
+      $('mainCard').innerHTML = `<div class="anim-up anim-d3">${escHtml(latest.text)}</div>`;
+
+      if (entries.length > 1) {
+        $('prevSection').style.display = '';
+        let html = '';
+        entries.slice(1).forEach((e, i) => {
+          const pd = new Date(e.date + 'T12:00:00');
+          const delay = Math.min(i, 5);
+          html += `
+            <div class="prev-card anim-up anim-d${delay + 1}" data-id="${e.id}">
+              <div class="prev-card-header">
+                <span class="prev-card-date">${pd.toLocaleDateString('en-US', {month:'long', day:'numeric'})}</span>
+                <span class="prev-card-day">${days[pd.getDay()]}</span>
+              </div>
+              <div class="prev-card-preview">${escHtml(e.text)}</div>
+            </div>`;
+        });
+        $('prevEntries').innerHTML = html;
+
+        // Toggle expand on click
+        $('prevEntries').querySelectorAll('.prev-card').forEach(card => {
+          card.addEventListener('click', () => card.classList.toggle('expanded'));
+        });
+      } else {
+        $('prevSection').style.display = 'none';
+      }
+    }
+
+    // ── Auth ──
+    $('loginBtn').addEventListener('click', () => {
+      if ($('pwInput').value === PW) {
+        sessionStorage.setItem('cfp_auth', '1');
+        $('loginBlock').style.display = 'none';
+        $('editorBlock').style.display = '';
+        $('loginMsg').textContent = '';
+        renderAdmin();
+      } else {
+        $('loginMsg').textContent = 'Wrong password';
+        $('loginMsg').className = 'msg err';
+      }
+    });
+    $('pwInput').addEventListener('keydown', e => e.key === 'Enter' && $('loginBtn').click());
+
+    // ── Admin render ──
+    function renderAdmin() {
+      const entries = getEntries();
+      entries.sort((a,b) => b.date.localeCompare(a.date));
+
+      $('dateInput').value = today();
+      $('textInput').value = '';
+      $('saveBtn').textContent = 'Add Entry';
+
+      let html = '';
+      if (entries.length > 0) {
+        html = '<div class="entry-list-label">All Entries</div>';
+        entries.forEach(e => {
+          const pd = new Date(e.date + 'T12:00:00');
+          html += `
+            <div class="entry-item">
+              <span class="entry-item-date">${pd.toLocaleDateString('en-US', {month:'short', day:'numeric'})}</span>
+              <span class="entry-item-preview">${escHtml(e.text.split('\n')[0])}</span>
+              <button class="btn-danger" data-delete="${e.id}">Delete</button>
+            </div>`;
+        });
+      }
+      $('entryList').innerHTML = html;
+
+      // Delete handlers
+      $('entryList').querySelectorAll('[data-delete]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.delete;
+          let entries = getEntries();
+          entries = entries.filter(e => e.id !== id);
+          saveEntries(entries);
+          renderAdmin();
+          $('saveMsg').textContent = 'Deleted.';
+          $('saveMsg').className = 'msg ok';
+          setTimeout(() => { $('saveMsg').textContent = ''; }, 1500);
+        });
+      });
+    }
+
+    // ── Save ──
+    $('saveBtn').addEventListener('click', () => {
+      const date = $('dateInput').value;
+      const text = $('textInput').value.trim();
+      if (!text) { $('saveMsg').textContent = 'Text is empty.'; $('saveMsg').className = 'msg err'; return; }
+
+      const entries = getEntries();
+      entries.push({ id: Date.now().toString(36), date, text });
+      saveEntries(entries);
+      renderAdmin();
+      $('dateInput').value = today();
+      $('textInput').value = '';
+      $('saveMsg').textContent = 'Added.';
+      $('saveMsg').className = 'msg ok';
+      setTimeout(() => { $('saveMsg').textContent = ''; }, 1500);
+    });
+
+    // ── Helpers ──
+    function today() { return new Date().toISOString().slice(0,10); }
+    function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // ── Service Worker (required for standalone PWA on Android) ──
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+</body>
+</html>
