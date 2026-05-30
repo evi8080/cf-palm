@@ -1,7 +1,7 @@
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('cfp-v1').then(cache =>
-      cache.addAll(['/', '/index.html', '/manifest.json', '/logo.jpg'])
+      cache.addAll(['/cf-palm/', '/cf-palm/index.html', '/cf-palm/manifest.json', '/cf-palm/logo.jpg'])
     )
   );
   self.skipWaiting();
